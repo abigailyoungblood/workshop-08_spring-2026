@@ -152,6 +152,17 @@ Label the axes with units where appropriate.
 
 Add a title describing the relationship (e.g. as SLA increases, total mass ______). 
 
+```{r scatterplot}
+
+ggplot(data = drought_exp_clean,
+       mapping = aes(x = sla,
+                     y = total_g)) +
+  geom_point() +
+  labs(title = "As SLA increases, total plant mass increases",
+       x = "Specific leaf area (cm\U00B2 / g)",
+       y = "total plant mass (g)")
+
+```
 
 
 
@@ -164,9 +175,23 @@ Label the axes with units where appropriate.
 
 Add a title describing the differences in (mean or median) plant mass between water treatments.
 
+```{r jitter-treatment}
 
+ggplot(data = drought_exp_clean,
+       mapping = aes(x = water_treatment,
+                     y = total_g,
+                     color = water_treatment)) +
+  geom_jitter(height = 0,
+              width = 0.1) +
+  labs(title = "Well watered individuaks tend to have higher mass than drought stressed",
+       x = "Treatment",
+       y = "total plant mass (g)") +
+  theme(legend.position = "none") +
+  scale_color_manual(values = c(
+    "Drought stressed" = ds_col,
+    "Well watered" = ww_col))
 
-
+```
 
 
 
@@ -180,6 +205,30 @@ Add a title describing the differences in (mean or median) plant mass between sp
 
 Bonus: order the x-axis by decreasing mean plant mass.
 
+```{r jitter-species}
+
+ggplot(data = drought_exp_clean,
+       mapping = aes(x = species_name,
+                     y = total_g,
+                     color = species_name)) +
+  geom_jitter(height = 0,
+              width = 0.1) +
+  labs(title = "Species differ in plant mass",
+       x = "Plant species",
+       y = "Total plant mass (g)") +
+  theme(legend.position = "none") +
+  scale_x_discrete(labels = label_wrap(10)) +
+  scale_color_manual(
+    values = c(
+      "Lotus scoparius" = lotsco_col,
+      "Penstemon centranthifolius" = pencen_col,
+      "Salvia leucophylla" = salleu_col,
+      "Encelia californica" = enccal_col,
+      "Stipa pulchra" = stipul_col,
+      "Eschscholzia californica" = esccal_col,
+      "Grindelia camporum" = gricam_col))
+
+```
 
 
 
@@ -208,27 +257,36 @@ Bonus: order the x-axis by decreasing mean plant mass.
 #| label: model fitting
 
 # model 0: null model
-
+model0 <- lm(total_g ~ 1,
+             data = drough_exp_clean)
 
 # model 1: all predictors
-
+model1 <- lm(total_g ~ sla + water_treatment + species_name,
+             data = drought_exp_clean)
 
 # model 2: SLA and water treatment
-
+model1 <- lm(total_g ~ sla + water_treatment,
+             data = drought_exp_clean)
 
 # model 3: SLA and species
-
+model1 <- lm(total_g ~ sla + species_name,
+             data = drought_exp_clean)
 
 # model 4: water treatment and species
-
+model1 <- lm(total_g ~ water_treatment + species_name,
+             data = drought_exp_clean)
 
 # model 5: SLA
-
+model1 <- lm(total_g ~ sla,
+             data = drought_exp_clean)
 
 # model 6: water treatment
-
+model1 <- lm(total_g ~ water_treatment,
+             data = drought_exp_clean)
 
 # model 7: species
+model1 <- lm(total_g ~ species_name,
+             data = drought_exp_clean)
 
 ```
 
@@ -245,6 +303,11 @@ Insert code to use the `AICc()` function to calculate the AIC for each model.
 
 Arrange by decreasing AIC.
 
+```{r model-selection}
+
+
+
+```
 
 
 
